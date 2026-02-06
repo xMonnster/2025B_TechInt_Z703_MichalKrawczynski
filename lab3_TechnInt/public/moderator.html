@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <title>Moderator — Blog</title>
+  <style>body{font-family:Arial;max-width:800px;margin:20px} button{cursor:pointer}</style>
+</head>
+<body>
+  <h1>Panel moderatora</h1>
+  <p>Lista oczekujących komentarzy.</p>
+  <div id="pending"></div>
+  <p><a href="/">Powrót do publicznego widoku</a></p>
+  <script>
+    async function load(){
+      const r = await fetch('/api/comments/pending');
+      const rows = await r.json();
+      const el = document.getElementById('pending');
+      if (!rows.length) { el.innerHTML = '<div>Brak oczekujących komentarzy.</div>'; return; }
+      el.innerHTML = rows.map(c => `\n        <div style="border:1px solid #ccc;padding:10px;margin-bottom:8px">\n          <div><b>Post:</b> ${c.post_id} <b>Autor:</b> ${escape(c.author)} <span class='minor'>${c.created_at}</span></div>\n          <div>${escape(c.body)}</div>\n          <button data-id='${c.id}'>Zatwierdź</button>\n        </div>
+      `).join('\n');
+      for (const b of document.querySelectorAll('button[data-id]')){
+        b.addEventListener('click', async ()=>{
+          const id = b.getAttribute('data-id');
+          const res = await fetch(`/api/comments/${id}/approve`,{method:'POST'});
+          if (res.ok) { load(); } else { alert('Błąd zatwierdzania'); }
+        });
+      }
+    }
+    function escape(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+    load();
+  </script>
+</body>
+</html>

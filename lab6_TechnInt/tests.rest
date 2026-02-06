@@ -1,0 +1,28 @@
+### Dodaj notatkę
+POST http://localhost:3000/api/notes
+Content-Type: application/json
+
+{
+  "title": "Przykład",
+  "body": "To jest przykładowa notatka do testów."
+}
+
+### Pobierz wszystkie notatki
+GET http://localhost:3000/api/notes
+
+### Wyszukaj notatki (q)
+GET http://localhost:3000/api/notes?q=przykład
+
+### Pobierz tagi
+GET http://localhost:3000/api/tags
+
+### Dodaj tagi do notatki (zamień :id na id zwrócone przy tworzeniu)
+POST http://localhost:3000/api/notes/:id/tags
+Content-Type: application/json
+
+{
+  "tags": ["praca","dom"]
+}
+
+### Filtrowanie po tagu
+GET http://localhost:3000/api/notes?tag=praca

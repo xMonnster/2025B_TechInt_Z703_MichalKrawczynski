@@ -1,0 +1,77 @@
+# tests.rest — przykłady wywołań dla aplikacji Blog (PL)
+# Uwaga: zmień ID (np. posta/komentarza) jeśli Twoja baza ma inne wartości.
+
+### Pobierz listę postów
+GET http://localhost:3000/api/posts
+Accept: application/json
+
+### Dodaj post (poprawne żądanie)
+POST http://localhost:3000/api/posts
+Content-Type: application/json
+
+{
+  "title": "Testowy post",
+  "body": "Treść testowego posta"
+}
+
+### Dodaj post (błąd: brak pól → 400)
+POST http://localhost:3000/api/posts
+Content-Type: application/json
+
+{
+  "title": ""
+}
+
+### Dodaj komentarz do posta (poprawne żądanie)
+POST http://localhost:3000/api/posts/1/comments
+Content-Type: application/json
+
+{
+  "author": "Jan",
+  "body": "To jest komentarz testowy"
+}
+
+### Dodaj komentarz (błąd: brak pól → 400)
+POST http://localhost:3000/api/posts/1/comments
+Content-Type: application/json
+
+{
+  "author": ""
+}
+
+### Dodaj komentarz do nieistniejącego posta (spodziewane 404)
+POST http://localhost:3000/api/posts/9999/comments
+Content-Type: application/json
+
+{
+  "author": "X",
+  "body": "Komentarz do nieistniejącego posta"
+}
+
+### Pobierz publiczne (zatwierdzone) komentarze dla posta
+GET http://localhost:3000/api/posts/1/comments
+Accept: application/json
+
+> Uwaga: komentarze z `approved=0` będą niewidoczne tutaj.
+
+### Lista oczekujących komentarzy (panel moderatora)
+GET http://localhost:3000/api/comments/pending
+Accept: application/json
+
+### Zatwierdź komentarz (przykład id=2)
+POST http://localhost:3000/api/comments/2/approve
+
+# Jeśli komentarz już jest zatwierdzony, serwer zwraca 409
+### Przykład: próbuj zatwierdzić już zatwierdzony komentarz (spodziewane 409)
+POST http://localhost:3000/api/comments/1/approve
+
+---
+# Scenariusz testowy (prosty przebieg):
+# 1) POST /api/posts -> utwórz post
+# 2) POST /api/posts/{id}/comments -> dodaj komentarz (approved=0)
+# 3) GET /api/posts/{id}/comments -> komentarz NIE powinien być widoczny
+# 4) GET /api/comments/pending -> powinien zawierać nowy komentarz
+# 5) POST /api/comments/{commentId}/approve -> zatwierdź
+# 6) GET /api/posts/{id}/comments -> komentarz powinien być widoczny
+
+# Możesz uruchomić pojedyncze żądanie z VSCode (REST Client) lub przy użyciu curl.

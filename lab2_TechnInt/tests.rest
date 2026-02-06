@@ -1,0 +1,82 @@
+# tests.rest — przykładowe żądania dla laboratorium Lab02
+# Uwaga: upewnij się, że serwer działa na http://localhost:3000
+
+### GET — lista produktów (powinny być zasiane)
+GET http://localhost:3000/api/products
+
+### POST — utwórz produkt (201 + Location)
+POST http://localhost:3000/api/products
+Content-Type: application/json
+
+{
+  "name": "Słuchawki",
+  "price": 199.99
+}
+
+### POST (negatywnie) — niepoprawna cena (oczekiwane 400)
+POST http://localhost:3000/api/products
+Content-Type: application/json
+
+{
+  "name": "Błąd",
+  "price": -5
+}
+
+### Dodaj do koszyka — użyj istniejącego product_id (1..n)
+POST http://localhost:3000/api/cart/add
+Content-Type: application/json
+
+{
+  "product_id": 1,
+  "qty": 2
+}
+
+### Sprawdź koszyk (powinien zawierać pozycję)
+GET http://localhost:3000/api/cart
+
+### Zmień ilość pozycji w koszyku (PATCH)
+PATCH http://localhost:3000/api/cart/item
+Content-Type: application/json
+
+{
+  "product_id": 1,
+  "qty": 3
+}
+
+### Usuń pozycję z koszyka (DELETE) — zastąp id zgodnie z zawartością koszyka
+DELETE http://localhost:3000/api/cart/item/1
+
+### Negatywny: dodaj nieistniejący produkt do koszyka (oczekiwane 404)
+POST http://localhost:3000/api/cart/add
+Content-Type: application/json
+
+{
+  "product_id": 9999,
+  "qty": 1
+}
+
+### Scenariusz checkout — happy path
+# 1) Dodaj pozycje do koszyka (jeśli nie ma)
+POST http://localhost:3000/api/cart/add
+Content-Type: application/json
+
+{
+  "product_id": 2,
+  "qty": 1
+}
+
+# 2) Checkout (oczekiwane 201, w headerze Location: /api/orders/{id})
+POST http://localhost:3000/api/checkout
+
+### Negatywny: checkout pustego koszyka (oczekiwane 400)
+POST http://localhost:3000/api/checkout
+
+### Pobierz zamówienie (zamień {id} na wartość z Location lub odpowiedzi)
+GET http://localhost:3000/api/orders/1
+
+# Pomocnicze polecenia curl (jeśli wolisz terminal)
+# Sprawdź Location nagłówka przy tworzeniu produktu:
+# curl -i -H "Content-Type: application/json" -d '{"name":"Test","price":1}' http://localhost:3000/api/products
+
+# Sprawdź brak cachowania dla API (nagłówek Cache-Control powinien być ustawiony, jeśli wdrożone)
+# curl -I http://localhost:3000/api/products

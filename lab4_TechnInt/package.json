@@ -1,0 +1,14 @@
+{
+  "name": "lab04-filmy",
+  "version": "1.0.0",
+  "description": "Prosta aplikacja: filmy i oceny (Lab 04)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "init-db": "node init_db.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "sqlite3": "^5.1.2"
+  }
+}

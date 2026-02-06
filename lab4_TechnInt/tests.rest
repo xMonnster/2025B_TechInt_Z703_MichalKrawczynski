@@ -1,0 +1,29 @@
+### Pobierz listę filmów
+GET http://localhost:3000/api/movies
+
+### Dodaj film - poprawne
+POST http://localhost:3000/api/movies
+Content-Type: application/json
+
+{
+  "title": "Nowy Film",
+  "year": 2020
+}
+
+### Dodaj ocenę - poprawne
+POST http://localhost:3000/api/ratings
+Content-Type: application/json
+
+{
+  "movie_id": 1,
+  "score": 5
+}
+
+### Dodaj ocenę - niepoprawny score
+POST http://localhost:3000/api/ratings
+Content-Type: application/json
+
+{
+  "movie_id": 1,
+  "score": 10
+}

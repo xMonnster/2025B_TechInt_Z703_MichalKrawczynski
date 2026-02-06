@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Notatnik — Lab 06</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width:900px; margin:20px auto; padding:10px; }
+    header { display:flex; justify-content:space-between; align-items:center; }
+    input, textarea { width:100%; padding:8px; margin:6px 0; }
+    .note { border:1px solid #ccc; padding:8px; margin:8px 0; border-radius:4px; }
+    .tags { margin-top:6px; }
+    .tag { background:#eef; padding:2px 6px; border-radius:4px; margin-right:6px; cursor:pointer; }
+    mark { background: #fffa8b; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Notatnik</h1>
+    <div>
+      <input id="search" placeholder="Szukaj… (tytuł lub treść)">
+    </div>
+  </header>
+
+  <section>
+    <h2>Dodaj notatkę</h2>
+    <form id="noteForm">
+      <input id="title" placeholder="Tytuł" required>
+      <textarea id="body" rows="4" placeholder="Treść" required></textarea>
+      <input id="tags" placeholder="Tagi (oddzielone przecinkami)">
+      <button type="submit">Dodaj notatkę</button>
+    </form>
+  </section>
+
+  <section>
+    <h2>Wyniki</h2>
+    <div id="tagsList"></div>
+    <div id="results"></div>
+  </section>
+
+  <script src="/app.js"></script>
+</body>
+</html>
